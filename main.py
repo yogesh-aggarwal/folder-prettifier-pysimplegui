@@ -9,6 +9,7 @@ base = "https://instagram.com"
 
 
 options = webdriver.ChromeOptions()
+options.add_argument("--window-size=1300,800")
 # options.add_argument("headless")
 client = webdriver.Chrome("chromedriver", options=options)
 
@@ -55,18 +56,9 @@ def login(uname=uname, pword=pword):
 
 def getProfilePicture(uname=uname):
     client.get(f"{base}/{uname}")
-    while True:
-        try:
-            client.find_element_by_xpath(
-                '//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[4]/a'
-            ).click()
-            break
-        except:
-            continue
-
     sleep(1)
     imgUrl = client.find_element_by_xpath(
-        "/html/body/div[1]/section/main/div/header/div/div/div/button/img"
+        '//*[@id="react-root"]/section/main/div/header/div/div/span/img'
     ).get_attribute("src")
     with open(f"{uname}.png", "wb") as f:
         f.write(requests.get(imgUrl).content)
@@ -179,4 +171,7 @@ def unfollowFollowers():
     unfollowUnames(_getAllFollow(following=False, show=False),)
 
 
-client.quit()
+getProfilePicture("theamitbhadana")
+
+
+# client.quit()
