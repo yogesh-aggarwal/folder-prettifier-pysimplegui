@@ -13,7 +13,6 @@ options.add_argument("--window-size=1300,800")
 # options.add_argument("headless")
 client = webdriver.Chrome("chromedriver", options=options)
 
-
 # Getting credentials from file
 with open("credentials.json") as f:
     credentials = json.loads(f.read())
@@ -64,7 +63,7 @@ def getProfilePicture(uname=uname):
         f.write(requests.get(imgUrl).content)
 
 
-def followUnames(unames):
+def followUnames(unames, uname=uname):
     login()
 
     for followUname in unames:
@@ -75,7 +74,7 @@ def followUnames(unames):
         ).click()
 
 
-def unfollowUnames(unames):
+def unfollowUnames(unames, uname=uname):
     login()
 
     for unfollowUname in unames:
@@ -90,7 +89,7 @@ def unfollowUnames(unames):
         ).click()
 
 
-def _getAllFollow(following=True, show=True):
+def _getAllFollow(following=True, show=True, uname=uname):
     login()
     client.get(f"{base}/{uname}")
     sleep(1)
@@ -121,15 +120,15 @@ def _getAllFollow(following=True, show=True):
     return unamesFinal
 
 
-def getAllFollowing():
+def getAllFollowing(uname=uname):
     return _getAllFollow(uname, pword, following=True)
 
 
-def getAllFollowers():
+def getAllFollowers(uname=uname):
     return _getAllFollow(uname, pword, following=False)
 
 
-def _getFollowNotFollow(arr, notArr):
+def _getFollowNotFollow(arr, notArr, uname=uname):
     notUnames = []
     for uname in arr:
         notUnames.append(uname) if uname not in notArr else False
@@ -137,7 +136,7 @@ def _getFollowNotFollow(arr, notArr):
     return notUnames
 
 
-def getFollowersButNotFollowing(show=True):
+def getFollowersButNotFollowing(show=True, uname=uname):
     final = _getFollowNotFollow(
         _getAllFollow(following=False, show=False),
         _getAllFollow(following=True, show=False),
@@ -146,7 +145,7 @@ def getFollowersButNotFollowing(show=True):
     return final
 
 
-def getFollowingButNotFollowers(show=True):
+def getFollowingButNotFollowers(show=True, uname=uname):
     final = _getFollowNotFollow(
         _getAllFollow(following=True, show=False),
         _getAllFollow(following=False, show=False),
@@ -155,23 +154,21 @@ def getFollowingButNotFollowers(show=True):
     return final
 
 
-def unfollowNotFollowing():
+def unfollowNotFollowing(uname=uname):
     unfollowUnames(getFollowingButNotFollowers(show=False))
 
 
-def followNotFollowers():
+def followNotFollowers(uname=uname):
     followUnames(getFollowersButNotFollowing(show=False))
 
 
-def unfollowAll():
+def unfollowAll(uname=uname):
     unfollowUnames(_getAllFollow(following=True, show=False),)
 
 
-def unfollowFollowers():
+def unfollowFollowers(uname=uname):
     unfollowUnames(_getAllFollow(following=False, show=False),)
 
+getProfilePicture("millindgaba")
 
-getProfilePicture("theamitbhadana")
-
-
-# client.quit()
+client.quit()
