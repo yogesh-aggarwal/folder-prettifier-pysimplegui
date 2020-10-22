@@ -11,8 +11,7 @@ base = "https://instagram.com"
 options = webdriver.ChromeOptions()
 options.add_argument("--window-size=1300,800")
 # options.add_argument("headless")
-client = webdriver.Chrome("chromedriver", options=options)
-
+client = webdriver.Edge("msedgedriver")
 # Getting credentials from file
 with open("credentials.json") as f:
     credentials = json.loads(f.read())
@@ -169,6 +168,7 @@ def unfollowAll(uname=uname):
 def unfollowFollowers(uname=uname):
     unfollowUnames(_getAllFollow(following=False, show=False),)
 
-getProfilePicture("millindgaba")
-
+# getProfilePicture("efficient-coder")
 client.quit()
+
+
